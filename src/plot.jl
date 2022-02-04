@@ -40,19 +40,18 @@ function plot_states(ρ;order=:numeric,ising_comp=ones(Int(log2(size(ρ)[1]))),n
     return plt
 end
 
-function plot_ground_states_dwisc(dw;order=:numeric,ising_comp=[])
-    dwisc = nothing
-    if typeof(dw) == String
-        if isfile(dw)
-            dwisc = JSON.parsefile(dw)
-        else
-            dwisc = JSON.parse(dw)
-        end
-    elseif typeof(dw) == Dict
-        dwisc = dw
+
+function plot_ground_states_dwisc(dw::String; kwargs...)
+    if isfile(dw)
+        dwisc_data = JSON.parsefile(dw)
     else
-        error("Invalid input type in plot_ground_states_dwisc: Valid inputs are a dwisc format JSON file location, a dwisc formatted JSON string, or a Dict with necessary dwisc keys")
+        dwisc_data = JSON.parse(dw)
     end
+
+    return plot_ground_states_dwisc(dwisc_data; kwargs...)
+end
+
+function plot_ground_states_dwisc(dw::Dict{String,<:Any}; order=:numeric, ising_comp=[])
     least_energy = dwisc["solutions"][1]["energy"]
     groundstates = filter(x -> x["energy"] ≈ least_energy,dwisc["solutions"])
 
@@ -89,19 +88,18 @@ function plot_ground_states_dwisc(dw;order=:numeric,ising_comp=[])
     return plt
 end
 
-function plot_states_dwisc(dw;order=:numeric,ising_comp=[],num_states=16)
-    dwisc = nothing
-    if typeof(dw) == String
-        if isfile(dw)
-            dwisc = JSON.parsefile(dw)
-        else
-            dwisc = JSON.parse(dw)
-        end
-    elseif typeof(dw) == Dict
-        dwisc = dw
+
+function plot_states_dwisc(dw::String; kwargs...)
+    if isfile(dw)
+        dwisc_data = JSON.parsefile(dw)
     else
-        error("Invalid input type in plot_ground_states_dwisc: Valid inputs are a dwisc format JSON file location, a dwisc formatted JSON string, or a Dict with necessary dwisc keys")
+        dwisc_data = JSON.parse(dw)
     end
+
+    return plot_states_dwisc(dwisc_data; kwargs...)
+end
+
+function plot_states_dwisc(dw::Dict{String,<:Any}; order=:numeric, ising_comp=[], num_states=16)
     least_energy = dwisc["solutions"][1]["energy"]
     states = dwisc["solutions"]
 
