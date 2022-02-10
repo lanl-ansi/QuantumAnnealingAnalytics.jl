@@ -172,7 +172,7 @@ function plot_state_steps(state_steps; kwargs...)
     xlabel = "s"
     ylabel = "prob"
     title = "Spin Trajectories"
-    legend = :right
+    legend = :topleft
     plt = Plots.plot(ss, plotted_states'; title=title, label=labels, xlabel=xlabel, ylabel=ylabel, legend=legend, kwargs...)
     return plt
 end
