@@ -1,18 +1,18 @@
-function ising2int(ising)
-    return QuantumAnnealing.binary2int(ising2binary(ising))
+function spin2int(spin)
+    return _QA.binary2int(spin2binary(spin))
 end
 
-function int2ising(ising;pad=pad)
-    return QuantumAnnealing.binary2ising(QuantumAnnealing.int2binary(ising,pad=pad))
+function int2spin(int;pad=pad)
+    return _QA.binary2spin(_QA.int2binary(int,pad=pad))
 end
 
-function ising2binary(ising)
-    return [i == 1 ? 0 : 1 for i in ising]
+function spin2binary(spin)
+    return [i == 1 ? 0 : 1 for i in spin]
 end
 
-function ising_hamming_distance(ising_1, ising_2)
-    x = ising2int(ising_1)
-    y = ising2int(ising_2)
+function spin_hamming_distance(spin_1, spin_2)
+    x = spin2int(spin_1)
+    y = spin2int(spin_2)
 
     #Kernighan's Algorithm
     diff_bits = xor(x,y)

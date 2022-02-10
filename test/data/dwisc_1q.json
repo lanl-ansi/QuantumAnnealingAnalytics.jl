@@ -1,0 +1,1 @@
+{"variable_ids":[100],"metadata":{"sim_annealing_time":0.1},"solutions":[{"solution":[-1],"energy":-1.0,"num_occurrences":99998435047271168,"prob":0.9999843504727117},{"solution":[1],"energy":1.0,"num_occurrences":1564952726008,"prob":1.5649527260084076e-5}]}
