@@ -1,7 +1,7 @@
 """
 function to plot an annealing schedule from QuantumAnnealing.jl.  kwargs are for Plots.plot
 """
-function plot_annealing_schedule(annealing_schedule::QuantumAnnealing.AnnealingSchedule;units="GHz", kwargs...)
+function plot_annealing_schedule(annealing_schedule::_QA.AnnealingSchedule;units="GHz", kwargs...)
     ss = 0.0:0.001:1.0
     plotted = hcat(annealing_schedule.A.(ss), annealing_schedule.B.(ss))
     plt = Plots.plot(ss, plotted; title="Annealing Schedule", xlabel = "s", ylabel = units, label = ["A(s)" "B(s)"], kwargs...)
@@ -14,7 +14,7 @@ function to plot the states present in a density matrix output by QuantumAnneali
 kwargs are for Plots.bar
 """
 function plot_states(ρ;order=:numeric,spin_comp=ones(Int(log2(size(ρ)[1]))),num_states=16, kwargs...)
-    state_probs = QuantumAnnealing.z_measure_probabilities(ρ)
+    state_probs = _QA.z_measure_probabilities(ρ)
     n = Int(log2(length(state_probs)))
     state_spin_vecs = map((x) -> int2spin(x,pad=n), 0:2^n-1)
 
@@ -166,7 +166,7 @@ function plot_state_steps(state_steps; kwargs...)
     state_probs = map(x -> [real(x[i,i]) for i = 1:2^n], state_steps)
     plotted_states = foldl(hcat,state_probs)
 
-    int2braket(i) = QuantumAnnealing.spin2braket(QuantumAnnealing.binary2spin(QuantumAnnealing.int2binary(i,pad=n)))
+    int2braket(i) = _QA.spin2braket(_QA.binary2spin(_QA.int2binary(i,pad=n)))
     labels = map(int2braket, reshape(0:2^n-1,1,:))
 
     xlabel = "s"

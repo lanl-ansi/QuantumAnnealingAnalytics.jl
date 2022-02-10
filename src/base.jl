@@ -1,9 +1,9 @@
 function spin2int(spin)
-    return QuantumAnnealing.binary2int(spin2binary(spin))
+    return _QA.binary2int(spin2binary(spin))
 end
 
 function int2spin(int;pad=pad)
-    return QuantumAnnealing.binary2spin(QuantumAnnealing.int2binary(int,pad=pad))
+    return _QA.binary2spin(_QA.int2binary(int,pad=pad))
 end
 
 function spin2binary(spin)
