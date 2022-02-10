@@ -1,7 +1,8 @@
 using QuantumAnnealing
 
-bqp1 = "bqpjson_1q.json"
-bqp2 = "bqpjson_2q.json"
+qa_json_path = joinpath(dirname(pathof(QuantumAnnealing)), "..")
+bqp1 = "$(qa_json_path)/test/data/bqpjson_1q.json"
+bqp2 = "$(qa_json_path)/test/data/bqpjson_2q.json"
 dwout1 = "dwisc_1q.json"
 dwout2 = "dwisc_2q.json"
 
