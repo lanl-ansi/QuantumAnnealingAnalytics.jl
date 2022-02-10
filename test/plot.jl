@@ -10,19 +10,19 @@ double_qubit_dwisc_string = JSON.json(double_qubit_dwisc_dict)
 #just testing that nothing errors out
 @testset "plotting annealing schedule" begin
     @testset "AS_CIRCULAR, no kwargs" begin
-        plt = plot_annealing_schedule(_QA.AS_CIRCULAR)
+        plt = plot_annealing_schedule(AS_CIRCULAR)
         @test true
     end
 
     @testset "AS_CIRCULAR, kwargs" begin
-        plt = plot_annealing_schedule(_QA.AS_CIRCULAR,xlabel="x")
+        plt = plot_annealing_schedule(AS_CIRCULAR,xlabel="x")
         @test true
     end
 end
 
 @testset "plotting states from ising dict, 1q" begin
     ising = Dict((1,) => 1)
-    ρ = _QA.simulate(ising, 100, _QA.AS_CIRCULAR, 100)
+    ρ = simulate(ising, 100, AS_CIRCULAR, 100)
 
     @testset "single qubit plot, numeric sorting, no kwargs" begin
         plt = plot_states(ρ,order=:numeric)
@@ -61,7 +61,7 @@ end
 
 @testset "plotting states from ising dict, 2q" begin
     ising = Dict((1,) => 1, (2,) => 1, (1,2) => -1)
-    ρ = _QA.simulate(ising, 100, _QA.AS_CIRCULAR, 100)
+    ρ = simulate(ising, 100, AS_CIRCULAR, 100)
 
     @testset "double qubit plot, numeric sorting, no kwargs" begin
         plt = plot_states(ρ,order=:numeric)
@@ -395,7 +395,7 @@ end
 @testset "plotting single qubit state steps" begin
     state_steps = []
     ising = Dict((1,) => 1)
-    ρ = _QA.simulate(ising, 100, _QA.AS_CIRCULAR, 100, state_steps=state_steps)
+    ρ = simulate(ising, 100, AS_CIRCULAR, 100, state_steps=state_steps)
 
     @testset "single qubit, no kwargs" begin
         plt = plot_state_steps(state_steps)
@@ -412,7 +412,7 @@ end
 @testset "plotting single qubit state steps" begin
     state_steps = []
     ising = Dict((1,) => 1, (2,) => 1, (1,2) => -1)
-    ρ = _QA.simulate(ising, 100, _QA.AS_CIRCULAR, 100, state_steps=state_steps)
+    ρ = simulate(ising, 100, AS_CIRCULAR, 100, state_steps=state_steps)
 
     @testset "single qubit, no kwargs" begin
         plt = plot_state_steps(state_steps)

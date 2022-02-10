@@ -1,8 +1,7 @@
 using QuantumAnnealingAnalytics
-import QuantumAnnealing
+using QuantumAnnealing
 using JSON
 using Test
-const _QA = QuantumAnnealing
 
 @testset "QuantumAnnealing" begin
 
