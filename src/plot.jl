@@ -78,6 +78,8 @@ function plot_ground_states_dwisc(dw::Dict{String,<:Any}; order=:numeric, spin_c
             error("invalid spin_comp length")
         end
         sortby = (x) -> spin_hamming_distance(x["solution"], spin_comp)
+    elseif order == :prob
+        sortby = (x) -> -x["num_occurrences"]
     else
         error("order must be either :numeric or :hamming")
     end
@@ -130,6 +132,8 @@ function plot_states_dwisc(dw::Dict{String,<:Any}; order=:numeric, spin_comp=[],
         sortby = (x) -> spin_hamming_distance(x["solution"], spin_comp)
     elseif order == :energy
         sortby = (x) -> x["energy"]
+    elseif order == :prob
+        sortby = (x) -> -x["num_occurrences"]
     else
         error("order must be :numeric, :hamming, or :energy")
     end
