@@ -4,7 +4,7 @@ function to plot an annealing schedule from QuantumAnnealing.jl.  kwargs are for
 function plot_annealing_schedule(annealing_schedule::_QA.AnnealingSchedule;units="GHz", kwargs...)
     ss = 0.0:0.001:1.0
     plotted = hcat(annealing_schedule.A.(ss), annealing_schedule.B.(ss))
-    plt = Plots.plot(ss, plotted; title="Annealing Schedule", xlabel = "s", ylabel = units, label = ["A(s)" "B(s)"], kwargs...)
+    plt = Plots.plot(ss, plotted; title="Annealing Schedule", xlabel="s", ylabel=units, label=["A(s)" "B(s)"], legend=:right, kwargs...)
     return plt
 end
 
@@ -44,7 +44,7 @@ function plot_states(ρ;order=:numeric,spin_comp=ones(Int(log2(size(ρ)[1]))),nu
     plt = Plots.bar(probs[1:num_states]; xticks = (1:num_states,strings[1:num_states]),
                     size = (900,600),bottom_margin=10mm, xlabel="spin state",
                     ylabel = "prob",title="State Probabilities of ρ",label="prob",
-                    legend = :topright, kwargs...)
+                    legend = :none, kwargs...)
     return plt
 end
 
@@ -78,6 +78,8 @@ function plot_ground_states_dwisc(dw::Dict{String,<:Any}; order=:numeric, spin_c
             error("invalid spin_comp length")
         end
         sortby = (x) -> spin_hamming_distance(x["solution"], spin_comp)
+    elseif order == :prob
+        sortby = (x) -> -x["num_occurrences"]
     else
         error("order must be either :numeric or :hamming")
     end
@@ -95,7 +97,7 @@ function plot_ground_states_dwisc(dw::Dict{String,<:Any}; order=:numeric, spin_c
     mm = Measures.mm
     plt = Plots.bar(groundprobs; xticks = (1:length(groundprobs),groundstrings), size = (900,600),bottom_margin=10mm,
               xlabel="spin state", ylabel = "prob",title="Ground States, Energy = $least_energy",label="prob",
-              legend = :topright, kwargs...)
+              legend = :none, kwargs...)
     return plt
 end
 
@@ -130,6 +132,8 @@ function plot_states_dwisc(dw::Dict{String,<:Any}; order=:numeric, spin_comp=[],
         sortby = (x) -> spin_hamming_distance(x["solution"], spin_comp)
     elseif order == :energy
         sortby = (x) -> x["energy"]
+    elseif order == :prob
+        sortby = (x) -> -x["num_occurrences"]
     else
         error("order must be :numeric, :hamming, or :energy")
     end
@@ -151,7 +155,7 @@ function plot_states_dwisc(dw::Dict{String,<:Any}; order=:numeric, spin_comp=[],
     plt = Plots.bar(probs[1:num_states]; xticks = (1:num_states,strings[1:num_states]),
                     size = (900,600),bottom_margin=10mm, xlabel="spin state",
                     ylabel = "prob",title="States, Least Energy = $least_energy",label="prob",
-                    legend = :topright, kwargs...)
+                    legend = :none, kwargs...)
     return plt
 end
 
@@ -172,7 +176,7 @@ function plot_state_steps(state_steps; kwargs...)
     xlabel = "s"
     ylabel = "prob"
     title = "Spin Trajectories"
-    legend = :right
+    legend = :topleft
     plt = Plots.plot(ss, plotted_states'; title=title, label=labels, xlabel=xlabel, ylabel=ylabel, legend=legend, kwargs...)
     return plt
 end

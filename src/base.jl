@@ -2,7 +2,7 @@ function spin2int(spin)
     return _QA.binary2int(spin2binary(spin))
 end
 
-function int2spin(int;pad=pad)
+function int2spin(int;pad=0)
     return _QA.binary2spin(_QA.int2binary(int,pad=pad))
 end
 
