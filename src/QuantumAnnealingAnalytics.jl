@@ -10,4 +10,7 @@ module QuantumAnnealingAnalytics
     include("plot.jl")
     include("export.jl")
 
+    import Plots: savefig
+    export savefig
+
 end  #module
