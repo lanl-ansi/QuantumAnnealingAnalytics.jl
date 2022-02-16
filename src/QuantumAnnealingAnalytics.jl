@@ -1,4 +1,5 @@
 module QuantumAnnealingAnalytics
+    import LinearAlgebra
     import Plots
     import Plots.Measures
     import QuantumAnnealing

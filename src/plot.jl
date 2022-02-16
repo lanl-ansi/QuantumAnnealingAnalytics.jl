@@ -181,10 +181,18 @@ function plot_state_steps(state_steps; kwargs...)
     return plt
 end
 
-function plot_varied_time_simulations(ising_model::Dict, annealing_schedule::_QA.AnnealingSchedule, time_range::Tuple; num_points=50, kwargs...)
+function plot_varied_time_simulations(ising_model::Dict, annealing_schedule::_QA.AnnealingSchedule, time_range::Tuple; num_points=50, xscale=:identity, kwargs...)
     n = _QA._check_ising_model_ids(ising_model)
     plotted_values = zeros(num_points, 2^n)
-    annealing_times = range(time_range[1], time_range[2], num_points)
+    annealing_times = nothing
+    if xscale == :identity
+        annealing_times = range(time_range[1], time_range[2], num_points)
+    elseif xscale == :log10
+        lower = log10(time_range[1])
+        upper = log10(time_range[2])
+        exponents = range(lower,upper,num_points)
+        annealing_times = 10 .^ exponents
+    end
 
     for (i, annealing_time) in enumerate(annealing_times)
         ρ = _QA.simulate(ising_model, annealing_time, annealing_schedule, silence=true)
@@ -199,7 +207,7 @@ function plot_varied_time_simulations(ising_model::Dict, annealing_schedule::_QA
     int2braket(i) = _QA.spin2braket(_QA.binary2spin(_QA.int2binary(i,pad=n)))
     labels = map(int2braket, reshape(0:2^n-1,1,:))
     legend = :right
-    plt = Plots.plot(annealing_times, plotted_values, title=title, xlabel=xlabel, ylabel=ylabel, label = labels, legend=legend, kwargs...)
+    plt = Plots.plot(annealing_times, plotted_values; title=title, xlabel=xlabel, ylabel=ylabel, label = labels, legend=legend, xscale=xscale, kwargs...)
     return plt
 end
 
