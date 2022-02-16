@@ -23,21 +23,21 @@ Plot an annealing schedule
 plt = plot_annealing_schedule(AS_CIRCULAR)
 ```
 
-Perform a basic simulation with an annealing time of `2.0` and the trigonometric annealing schedule, and plot the probability distribution
+Perform a basic simulation with an annealing time of `2.0` and the linear annealing schedule, and plot the probability distribution
 ```
-ρ = simulate(ising_model, 2.0, AS_CIRCULAR)
+ρ = simulate(ising_model, 2.0, AS_LINEAR)
 plt = plot_states(ρ)
 ```
 
 Increase the annealing time to approach the adiabatic limit,
 ```
-ρ = simulate(ising_model, 10.0, AS_CIRCULAR)
+ρ = simulate(ising_model, 5.0, AS_LINEAR)
 plt = plot_states(ρ)
 ```
 
 Change the annealing schedule and observe different state probabilities and save the results to a file,
 ```
-ρ = simulate(ising_model, 10.0, AS_QUADRATIC)
+ρ = simulate(ising_model, 5.0, AS_QUADRATIC)
 plt = plot_states(ρ)
 savefig(plt, "file.pdf")
 ```
@@ -45,7 +45,7 @@ savefig(plt, "file.pdf")
 Store intermediate steps in the anneal and plot instantaneous state measurement probabilities
 ```
 ρ_steps=[]
-ρ = simulate(ising_model, 10.0, AS_CIRCULAR, state_steps=ρ_steps)
+ρ = simulate(ising_model, 5.0, AS_LINEAR, state_steps=ρ_steps)
 plt = plot_state_steps(ρ_steps)
 ```
 
