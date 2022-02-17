@@ -20,7 +20,7 @@ ising_model = Dict((1,) => 0.1, (1,2) => -1.0)
 
 Plot an annealing schedule
 ```
-plt = plot_annealing_schedule(AS_CIRCULAR)
+plt = plot_annealing_schedule(AS_LINEAR)
 ```
 
 Perform a basic simulation with an annealing time of `2.0` and the linear annealing schedule, and plot the probability distribution
