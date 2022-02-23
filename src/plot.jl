@@ -212,7 +212,7 @@ function plot_varied_time_simulations(ising_model::Dict, annealing_schedule::_QA
 end
 
 function plot_hamiltonian_energy_spectrum(hamiltonian::Function; s_range = (0,1), num_points = 50, kwargs...)
-    ss = range(s_range[1],s_range[2],num_points)
+    ss = range(s_range[1],s_range[2],length=num_points)
     n = size(hamiltonian(ss[1]))[1]
 
     energies = zeros(num_points, n)
