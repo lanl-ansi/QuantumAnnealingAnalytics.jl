@@ -16,13 +16,13 @@ kwargs are for Plots.bar
 function plot_states(ρ;order=:numeric,spin_comp=ones(Int(log2(size(ρ)[1]))),num_states=16, kwargs...)
     state_probs = _QA.z_measure_probabilities(ρ)
     n = Int(log2(length(state_probs)))
-    state_spin_vecs = map((x) -> int2spin(x,pad=n), 0:2^n-1)
+    state_spin_vecs = map((x) -> _QA.int2spin(x,pad=n), 0:2^n-1)
 
     states = [(prob = state_probs[i], spin_vec = state_spin_vecs[i]) for i = 1:length(state_probs)]
 
     sortby = nothing
     if order == :numeric
-        sortby = (x) -> spin2int(x.spin_vec)
+        sortby = (x) -> _QA.spin2int(x.spin_vec)
     elseif order == :hamming
         if length(spin_comp) != n
             error("invalid spin_comp length")
@@ -70,7 +70,7 @@ function plot_ground_states_dwisc(dw::Dict{String,<:Any}; order=:numeric, spin_c
 
     sortby = nothing
     if order == :numeric
-        sortby = (x) -> spin2int(x["solution"])
+        sortby = (x) -> _QA.spin2int(x["solution"])
     elseif order == :hamming
         if spin_comp == []
             spin_comp = ones(n)
@@ -122,7 +122,7 @@ function plot_states_dwisc(dw::Dict{String,<:Any}; order=:numeric, spin_comp=[],
     n = length(states[1]["solution"])
     sortby = nothing
     if order == :numeric
-        sortby = (x) -> spin2int(x["solution"])
+        sortby = (x) -> _QA.spin2int(x["solution"])
     elseif order == :hamming
         if spin_comp == []
             spin_comp = ones(n)
@@ -208,6 +208,26 @@ function plot_varied_time_simulations(ising_model::Dict, annealing_schedule::_QA
     labels = map(int2braket, reshape(0:2^n-1,1,:))
     legend = :right
     plt = Plots.plot(annealing_times, plotted_values; title=title, xlabel=xlabel, ylabel=ylabel, label = labels, legend=legend, xscale=xscale, kwargs...)
+    return plt
+end
+
+function plot_hamiltonian_energy_spectrum(hamiltonian::Function; s_range = (0,1), num_points = 50, kwargs...)
+    ss = range(s_range[1],s_range[2],num_points)
+    n = size(hamiltonian(ss[1]))[1]
+
+    energies = zeros(num_points, n)
+    for (i,s) in enumerate(ss)
+        hs = hamiltonian(s)
+        evals, evecs = LinearAlgebra.eigen(Matrix(hs))
+        energies[i,:] = evals
+    end
+
+    title = "Energy Spectrum of H(s)"
+    xlabel = "s"
+    ylabel = "energy"
+    legend = false
+
+    plt = Plots.plot(ss, energies; title=title, xlabel=xlabel, ylabel=ylabel, legend=legend, kwargs...)
     return plt
 end
 
