@@ -1,18 +1,6 @@
-function spin2int(spin)
-    return _QA.binary2int(spin2binary(spin))
-end
-
-function int2spin(int;pad=0)
-    return _QA.binary2spin(_QA.int2binary(int,pad=pad))
-end
-
-function spin2binary(spin)
-    return [i == 1 ? 0 : 1 for i in spin]
-end
-
 function spin_hamming_distance(spin_1, spin_2)
-    x = spin2int(spin_1)
-    y = spin2int(spin_2)
+    x = _QA.spin2int(spin_1)
+    y = _QA.spin2int(spin_2)
 
     #Kernighan's Algorithm
     diff_bits = xor(x,y)

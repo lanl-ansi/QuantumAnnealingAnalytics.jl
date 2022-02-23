@@ -547,3 +547,20 @@ end
     end
 
 end
+
+@testset "plotting hamiltonian energy spectrum" begin
+    ising_model = Dict((1,) => 1, (2,) => -.25, (1,2) => -.9)
+    H(s) = transverse_ising_hamiltonian(ising_model, AS_CIRCULAR, s)
+    @testset "No parameters" begin
+        plt = plot_hamiltonian_energy_spectrum(H)
+        @test true
+    end
+    @testset "Changing kwargs" begin
+        plt = plot_hamiltonian_energy_spectrum(H, xlabel = "x")
+        @test true
+    end
+    @testset "changing s_range" begin
+        plt = plot_hamiltonian_energy_spectrum(H, s_range=(0.5,0.7))
+        @test true
+    end
+end
