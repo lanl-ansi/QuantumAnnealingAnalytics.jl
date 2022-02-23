@@ -12,4 +12,4 @@ QuantumAnnealing = "4832667a-bab9-40a8-88f6-be9efce3ea89"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [compat]
-QuantumAnnealing = "0.1"
+QuantumAnnealing = "~0.1"
