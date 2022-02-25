@@ -25,7 +25,7 @@ end
     ρ = simulate(ising, 100, AS_CIRCULAR, 100)
 
     @testset "single qubit plot, numeric sorting, no kwargs" begin
-        plt = plot_states(ρ,order=:numeric)
+        plt = plot_states(ρ, order=:numeric)
         @test true
     end
 

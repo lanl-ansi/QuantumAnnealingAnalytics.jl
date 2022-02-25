@@ -1,10 +1,9 @@
 """
 function to plot an annealing schedule from QuantumAnnealing.jl.  kwargs are for Plots.plot
 """
-function plot_annealing_schedule(annealing_schedule::_QA.AnnealingSchedule;units="GHz", kwargs...)
-    ss = 0.0:0.001:1.0
-    plotted = hcat(annealing_schedule.A.(ss), annealing_schedule.B.(ss))
-    plt = Plots.plot(ss, plotted; title="Annealing Schedule", xlabel="s", ylabel=units, label=["A(s)" "B(s)"], legend=:right, kwargs...)
+function plot_annealing_schedule(annealing_schedule::_QA.AnnealingSchedule; s_steps=0.0:0.001:1.0, kwargs...)
+    plotted = hcat(annealing_schedule.A.(s_steps), annealing_schedule.B.(s_steps))
+    plt = Plots.plot(s_steps, plotted; title="Annealing Schedule", xlabel="s", label=["A(s)" "B(s)"], legend=:right, kwargs...)
     return plt
 end
 
@@ -13,7 +12,7 @@ end
 function to plot the states present in a density matrix output by QuantumAnnealing.simulate
 kwargs are for Plots.bar
 """
-function plot_states(ρ;order=:numeric,spin_comp=ones(Int(log2(size(ρ)[1]))),num_states=16, ising_model=nothing, energy_levels=0, kwargs...)
+function plot_states(ρ; order=:numeric, spin_comp=ones(Int(log2(size(ρ)[1]))), num_states=16, ising_model=nothing, energy_levels=0, kwargs...)
     state_probs = _QA.z_measure_probabilities(ρ)
     n = Int(log2(length(state_probs)))
     state_spin_vecs = map((x) -> _QA.int2spin(x,pad=n), 0:2^n-1)
@@ -47,7 +46,7 @@ function plot_states(ρ;order=:numeric,spin_comp=ones(Int(log2(size(ρ)[1]))),nu
     mm = Measures.mm
     plt = Plots.bar(probs[1:num_states]; xticks = (1:num_states,strings[1:num_states]),
                     size = (900,600),bottom_margin=10mm, xlabel="spin state",
-                    ylabel = "prob",title="State Probabilities of ρ",label="prob",
+                    ylabel = "probability",title="State Probabilities of ρ",label="prob",
                     legend = :none, kwargs...)
     return plt
 end
@@ -100,7 +99,7 @@ function plot_ground_states_dwisc(dw::Dict{String,<:Any}; order=:numeric, spin_c
     groundstrings = map(x -> join(string.(x["solution"]),"\n"), groundstates)
     mm = Measures.mm
     plt = Plots.bar(groundprobs; xticks = (1:length(groundprobs),groundstrings), size = (900,600),bottom_margin=10mm,
-              xlabel="spin state", ylabel = "prob",title="Ground States, Energy = $least_energy",label="prob",
+              xlabel="spin state", ylabel = "probability",title="Ground States, Energy = $least_energy",label="prob",
               legend = :none, kwargs...)
     return plt
 end
@@ -157,8 +156,8 @@ function plot_states_dwisc(dw::Dict{String,<:Any}; order=:numeric, spin_comp=[],
     num_states = min(length(states),num_states)
 
     plt = Plots.bar(probs[1:num_states]; xticks = (1:num_states,strings[1:num_states]),
-                    size = (900,600),bottom_margin=10mm, xlabel="spin state",
-                    ylabel = "prob",title="States, Least Energy = $least_energy",label="prob",
+                    size = (900,600), bottom_margin=10mm, xlabel="spin state",
+                    ylabel = "probability",title="States, Least Energy = $least_energy",label="prob",
                     legend = :none, kwargs...)
     return plt
 end
@@ -177,14 +176,14 @@ function plot_state_steps(state_steps; ising_model=nothing, energy_levels=0, kwa
     kept_states = _get_states(ising_model, energy_levels, n = n)
     kept_indices = kept_states .+ 1
 
-    int2braket(i) = _QA.spin2braket(_QA.binary2spin(_QA.int2binary(i,pad=n)))
+    int2braket(i) = _QA.spin2braket(_QA.int2spin(i,pad=n))
     labels = map(int2braket, reshape(kept_states,1,:))
 
     plotted_states = plotted_states[kept_indices,:]
 
     xlabel = "s"
-    ylabel = "prob"
-    title = "Spin Trajectories"
+    ylabel = "probability"
+    title = "Spin State Trajectories"
     legend = :topleft
     plt = Plots.plot(ss, plotted_states'; title=title, label=labels, xlabel=xlabel, ylabel=ylabel, legend=legend, kwargs...)
     return plt
@@ -213,14 +212,14 @@ function plot_varied_time_simulations(ising_model::Dict, annealing_schedule::_QA
     kept_indices = kept_states .+ 1
     plotted_values = plotted_values[:,kept_indices]
 
-    title = "Time Sweep Probabilities"
+    title = "Time Varying State Probabilities"
     xlabel = "annealing time"
-    ylabel = "prob"
+    ylabel = "probability"
 
-    int2braket(i) = _QA.spin2braket(_QA.binary2spin(_QA.int2binary(i,pad=n)))
+    int2braket(i) = _QA.spin2braket(_QA.int2spin(i,pad=n))
     labels = map(int2braket, reshape(kept_states,1,:))
-    legend = :right
-    plt = Plots.plot(annealing_times, plotted_values; title=title, xlabel=xlabel, ylabel=ylabel, label = labels, legend=legend, xscale=xscale, kwargs...)
+    legend = :topleft
+    plt = Plots.plot(annealing_times, plotted_values; title=title, xlabel=xlabel, ylabel=ylabel, label=labels, legend=legend, xscale=xscale, kwargs...)
     return plt
 end
 
@@ -235,10 +234,10 @@ function plot_hamiltonian_energy_spectrum(hamiltonian::Function; s_range = (0,1)
         energies[i,:] = evals
     end
 
-    title = "Energy Spectrum of H(s)"
+    title = "Time Varying Spectrum of H"
     xlabel = "s"
     ylabel = "energy"
-    legend = false
+    legend = :none
 
     plt = Plots.plot(ss, energies; title=title, xlabel=xlabel, ylabel=ylabel, legend=legend, kwargs...)
     return plt
