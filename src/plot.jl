@@ -13,7 +13,7 @@ end
 function to plot the states present in a density matrix output by QuantumAnnealing.simulate
 kwargs are for Plots.bar
 """
-function plot_states(ρ;order=:numeric,spin_comp=ones(Int(log2(size(ρ)[1]))),num_states=16, kwargs...)
+function plot_states(ρ;order=:numeric,spin_comp=ones(Int(log2(size(ρ)[1]))),num_states=16, ising_model=nothing, energy_levels=0, kwargs...)
     state_probs = _QA.z_measure_probabilities(ρ)
     n = Int(log2(length(state_probs)))
     state_spin_vecs = map((x) -> _QA.int2spin(x,pad=n), 0:2^n-1)
@@ -34,6 +34,10 @@ function plot_states(ρ;order=:numeric,spin_comp=ones(Int(log2(size(ρ)[1]))),nu
     else
         error("order must be either :numeric or :hamming or :prob")
     end
+
+    kept_states = _get_states(ising_model, energy_levels, n = n)
+    filter_function = (x) -> _QA.spin2int(x.spin_vec) in kept_states
+    states = filter(filter_function, states)
 
     states = sort(states, by=sortby)
     probs = [states[i].prob for i = 1:length(states)]
@@ -163,15 +167,20 @@ end
 function to plot the state steps, generated from calling simulate(..., state_steps=[]).  This
 is used to see instantaneous measurement values throughout the anneal.  kwargs are for Plots.plot
 """
-function plot_state_steps(state_steps; kwargs...)
+function plot_state_steps(state_steps; ising_model=nothing, energy_levels=0, kwargs...)
     n = Int(log2(size(state_steps[1])[1]))
     ss = range(0,1,length=length(state_steps))
 
     state_probs = map(x -> [real(x[i,i]) for i = 1:2^n], state_steps)
     plotted_states = foldl(hcat,state_probs)
 
+    kept_states = _get_states(ising_model, energy_levels, n = n)
+    kept_indices = kept_states .+ 1
+
     int2braket(i) = _QA.spin2braket(_QA.binary2spin(_QA.int2binary(i,pad=n)))
-    labels = map(int2braket, reshape(0:2^n-1,1,:))
+    labels = map(int2braket, reshape(kept_states,1,:))
+
+    plotted_states = plotted_states[kept_indices,:]
 
     xlabel = "s"
     ylabel = "prob"
@@ -181,7 +190,7 @@ function plot_state_steps(state_steps; kwargs...)
     return plt
 end
 
-function plot_varied_time_simulations(ising_model::Dict, annealing_schedule::_QA.AnnealingSchedule, time_range::Tuple; num_points=50, xscale=:identity, kwargs...)
+function plot_varied_time_simulations(ising_model::Dict, annealing_schedule::_QA.AnnealingSchedule, time_range::Tuple; num_points=50, xscale=:identity, energy_levels = 0, kwargs...)
     n = _QA._check_ising_model_ids(ising_model)
     plotted_values = zeros(num_points, 2^n)
     annealing_times = nothing
@@ -200,12 +209,16 @@ function plot_varied_time_simulations(ising_model::Dict, annealing_schedule::_QA
         plotted_values[i,:] = probs
     end
 
+    kept_states = _get_states(ising_model, energy_levels, n = n)
+    kept_indices = kept_states .+ 1
+    plotted_values = plotted_values[:,kept_indices]
+
     title = "Time Sweep Probabilities"
     xlabel = "annealing time"
     ylabel = "prob"
 
     int2braket(i) = _QA.spin2braket(_QA.binary2spin(_QA.int2binary(i,pad=n)))
-    labels = map(int2braket, reshape(0:2^n-1,1,:))
+    labels = map(int2braket, reshape(kept_states,1,:))
     legend = :right
     plt = Plots.plot(annealing_times, plotted_values; title=title, xlabel=xlabel, ylabel=ylabel, label = labels, legend=legend, xscale=xscale, kwargs...)
     return plt
