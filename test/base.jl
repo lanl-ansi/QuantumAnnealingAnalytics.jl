@@ -65,4 +65,17 @@ end
     ising_model = Dict((1,) => 1, (2,) => 1); energy_levels = 1; n = 2
     states = QuantumAnnealingAnalytics._get_states(ising_model, energy_levels, n = n)
     @test states == [3]
+
+
+    ising_model = nothing; energy_levels = -1; n = 2
+    try
+        states = QuantumAnnealingAnalytics._get_states(ising_model, energy_levels, n = n)
+        @test false
+    catch
+        @test true
+    end
+
+    ising_model = Dict((1,) => 1, (2,) => 1); energy_levels = 10; n = 0
+    states = QuantumAnnealingAnalytics._get_states(ising_model, energy_levels, n = n)
+    @test states == [0, 1, 2, 3]
 end
