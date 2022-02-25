@@ -548,6 +548,14 @@ end
 
 end
 
+
+@testset "plotting varied time simulations" begin
+    ising_model = Dict((1,) => 1, (2,) => -.25, (1,2) => -.9)
+    plot_varied_time_simulations(ising_model, AS_CIRCULAR, (0.5, 10), num_points=10)
+    @test true
+end
+
+
 @testset "plotting hamiltonian energy spectrum" begin
     ising_model = Dict((1,) => 1, (2,) => -.25, (1,2) => -.9)
     H(s) = transverse_ising_hamiltonian(ising_model, AS_CIRCULAR, s)
