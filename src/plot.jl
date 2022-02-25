@@ -35,16 +35,7 @@ function plot_states(ρ;order=:numeric,spin_comp=ones(Int(log2(size(ρ)[1]))),nu
         error("order must be either :numeric or :hamming or :prob")
     end
 
-    kept_states = 0:2^n-1
-    if energy_levels != 0
-        if ising_model == nothing
-            error("must provide ising_model if energy levels are specified")
-        else
-            energies = _QA.compute_ising_energy_levels(ising_model)
-            kept_states = foldl(union, [energies[i].states for i = 1:energy_levels])
-        end
-    end
-
+    kept_states = _get_states(ising_model, energy_levels, n = n)
     filter_function = (x) -> _QA.spin2int(x.spin_vec) in kept_states
     states = filter(filter_function, states)
 
@@ -183,17 +174,8 @@ function plot_state_steps(state_steps; ising_model=nothing, energy_levels=0, kwa
     state_probs = map(x -> [real(x[i,i]) for i = 1:2^n], state_steps)
     plotted_states = foldl(hcat,state_probs)
 
-    kept_states = 0:2^n-1
-    kept_indices = 1:2^n
-    if energy_levels != 0
-        if ising_model == nothing
-            error("must provide ising_model if energy levels are specified")
-        else
-            energies = _QA.compute_ising_energy_levels(ising_model)
-            kept_states = sort(collect(foldl(union, [energies[i].states for i = 1:energy_levels])))
-            kept_indices = kept_states .+ 1
-        end
-    end
+    kept_states = _get_states(ising_model, energy_levels, n = n)
+    kept_indices = kept_states .+ 1
 
     int2braket(i) = _QA.spin2braket(_QA.binary2spin(_QA.int2binary(i,pad=n)))
     labels = map(int2braket, reshape(kept_states,1,:))
@@ -227,16 +209,7 @@ function plot_varied_time_simulations(ising_model::Dict, annealing_schedule::_QA
         plotted_values[i,:] = probs
     end
 
-    energies = _QA.compute_ising_energy_levels(ising_model)
-    kept_states = nothing
-    if energy_levels in 1:length(energies)
-        kept_states = sort(collect(foldl(union, [energies[i].states for i = 1:energy_levels])))
-    elseif energy_levels == 0
-        kept_states = [0:2^n-1]
-    else
-        error("Invalid number of energy levels specified")
-    end
-
+    kept_states = _get_states(ising_model, energy_levels, n = n)
     kept_indices = kept_states .+ 1
     plotted_values = plotted_values[:,kept_indices]
 
