@@ -1,4 +1,8 @@
 # QuantumAnnealingAnalytics.jl
+[![CI](https://github.com/lanl-ansi/QuantumAnnealingAnalytics.jl/workflows/CI/badge.svg)](https://github.com/lanl-ansi/QuantumAnnealingAnalytics.jl/actions?query=workflow%3ACI)
+[![codecov](https://codecov.io/gh/lanl-ansi/QuantumAnnealingAnalytics.jl/branch/main/graph/badge.svg?token=0MYSS2hWWH)](https://codecov.io/gh/lanl-ansi/QuantumAnnealingAnalytics.jl)
+[![Documentation](https://github.com/lanl-ansi/QuantumAnnealingAnalytics.jl/workflows/Documentation/badge.svg)](https://lanl-ansi.github.io/QuantumAnnealingAnalytics.jl/dev/)
+
 Tools for Visualization of Quantum Annealing
 
 ## Dependencies
