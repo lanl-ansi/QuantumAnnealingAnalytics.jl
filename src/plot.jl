@@ -194,11 +194,11 @@ function plot_varied_time_simulations(ising_model::Dict, annealing_schedule::_QA
     plotted_values = zeros(num_points, 2^n)
     annealing_times = nothing
     if xscale == :identity
-        annealing_times = range(time_range[1], time_range[2], num_points)
+        annealing_times = range(time_range[1], time_range[2], length=num_points)
     elseif xscale == :log10
         lower = log10(time_range[1])
         upper = log10(time_range[2])
-        exponents = range(lower,upper,num_points)
+        exponents = range(lower,upper,length=num_points)
         annealing_times = 10 .^ exponents
     end
 
