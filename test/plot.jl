@@ -25,7 +25,7 @@ end
     ρ = simulate(ising, 100, AS_CIRCULAR, 100)
 
     @testset "single qubit plot, numeric sorting, no kwargs" begin
-        plt = plot_states(ρ,order=:numeric)
+        plt = plot_states(ρ, order=:numeric)
         @test true
     end
 
@@ -547,6 +547,14 @@ end
     end
 
 end
+
+
+@testset "plotting varied time simulations" begin
+    ising_model = Dict((1,) => 1, (2,) => -.25, (1,2) => -.9)
+    plot_varied_time_simulations(ising_model, AS_CIRCULAR, (0.5, 10), num_points=10)
+    @test true
+end
+
 
 @testset "plotting hamiltonian energy spectrum" begin
     ising_model = Dict((1,) => 1, (2,) => -.25, (1,2) => -.9)

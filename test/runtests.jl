@@ -1,4 +1,5 @@
 using QuantumAnnealingAnalytics
+
 using QuantumAnnealing
 using JSON
 using Test
