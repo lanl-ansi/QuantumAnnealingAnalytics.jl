@@ -1,6 +1,6 @@
 function spin_hamming_distance(spin_1, spin_2)
-    x = _QA.spin2int(spin_1)
-    y = _QA.spin2int(spin_2)
+    x = _QA.spin_to_int(spin_1)
+    y = _QA.spin_to_int(spin_2)
 
     #Kernighan's Algorithm
     diff_bits = xor(x,y)

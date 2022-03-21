@@ -15,13 +15,13 @@ kwargs are for Plots.bar
 function plot_states(ρ; order=:numeric, spin_comp=ones(Int(log2(size(ρ)[1]))), num_states=16, ising_model=nothing, energy_levels=0, kwargs...)
     state_probs = _QA.z_measure_probabilities(ρ)
     n = Int(log2(length(state_probs)))
-    state_spin_vecs = map((x) -> _QA.int2spin(x,pad=n), 0:2^n-1)
+    state_spin_vecs = map((x) -> _QA.int_to_spin(x,pad=n), 0:2^n-1)
 
     states = [(prob = state_probs[i], spin_vec = state_spin_vecs[i]) for i = 1:length(state_probs)]
 
     sortby = nothing
     if order == :numeric
-        sortby = (x) -> _QA.spin2int(x.spin_vec)
+        sortby = (x) -> _QA.spin_to_int(x.spin_vec)
     elseif order == :hamming
         if length(spin_comp) != n
             error("invalid spin_comp length")
@@ -35,7 +35,7 @@ function plot_states(ρ; order=:numeric, spin_comp=ones(Int(log2(size(ρ)[1]))),
     end
 
     kept_states = _get_states(ising_model, energy_levels, n = n)
-    filter_function = (x) -> _QA.spin2int(x.spin_vec) in kept_states
+    filter_function = (x) -> _QA.spin_to_int(x.spin_vec) in kept_states
     states = filter(filter_function, states)
 
     states = sort(states, by=sortby)
@@ -73,7 +73,7 @@ function plot_ground_states_dwisc(dw::Dict{String,<:Any}; order=:numeric, spin_c
 
     sortby = nothing
     if order == :numeric
-        sortby = (x) -> _QA.spin2int(x["solution"])
+        sortby = (x) -> _QA.spin_to_int(x["solution"])
     elseif order == :hamming
         if spin_comp == []
             spin_comp = ones(n)
@@ -125,7 +125,7 @@ function plot_states_dwisc(dw::Dict{String,<:Any}; order=:numeric, spin_comp=[],
     n = length(states[1]["solution"])
     sortby = nothing
     if order == :numeric
-        sortby = (x) -> _QA.spin2int(x["solution"])
+        sortby = (x) -> _QA.spin_to_int(x["solution"])
     elseif order == :hamming
         if spin_comp == []
             spin_comp = ones(n)
@@ -176,7 +176,7 @@ function plot_state_steps(state_steps; ising_model=nothing, energy_levels=0, kwa
     kept_states = _get_states(ising_model, energy_levels, n = n)
     kept_indices = kept_states .+ 1
 
-    int2braket(i) = _QA.spin2braket(_QA.int2spin(i,pad=n))
+    int2braket(i) = _QA.spin_to_braket(_QA.int_to_spin(i,pad=n))
     labels = map(int2braket, reshape(kept_states,1,:))
 
     plotted_states = plotted_states[kept_indices,:]
@@ -216,7 +216,7 @@ function plot_varied_time_simulations(ising_model::Dict, annealing_schedule::_QA
     xlabel = "annealing time"
     ylabel = "probability"
 
-    int2braket(i) = _QA.spin2braket(_QA.int2spin(i,pad=n))
+    int2braket(i) = _QA.spin_to_braket(_QA.int_to_spin(i,pad=n))
     labels = map(int2braket, reshape(kept_states,1,:))
     legend = :topleft
     plt = Plots.plot(annealing_times, plotted_values; title=title, xlabel=xlabel, ylabel=ylabel, label=labels, legend=legend, xscale=xscale, kwargs...)
