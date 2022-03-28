@@ -22,7 +22,7 @@ end
 
 @testset "plotting states from ising dict, 1q" begin
     ising = Dict((1,) => 1)
-    ρ = simulate(ising, 100, AS_CIRCULAR, 100)
+    ρ = simulate(ising, 10, AS_CIRCULAR, silence=true)
 
     @testset "single qubit plot, numeric sorting, no kwargs" begin
         plt = plot_states(ρ, order=:numeric)
@@ -61,7 +61,7 @@ end
 
 @testset "plotting states from ising dict, 2q" begin
     ising = Dict((1,) => 1, (2,) => 1, (1,2) => -1)
-    ρ = simulate(ising, 100, AS_CIRCULAR, 100)
+    ρ = simulate(ising, 10, AS_CIRCULAR, silence=true)
 
     @testset "two qubit plot, numeric sorting, no kwargs" begin
         plt = plot_states(ρ,order=:numeric)
@@ -517,7 +517,7 @@ end
 @testset "plotting single qubit state steps" begin
     state_steps = []
     ising = Dict((1,) => 1)
-    ρ = simulate(ising, 100, AS_CIRCULAR, 100, state_steps=state_steps)
+    ρ = simulate(ising, 10, AS_CIRCULAR, silence=true, state_steps=state_steps)
 
     @testset "single qubit, no kwargs" begin
         plt = plot_state_steps(state_steps)
@@ -534,7 +534,7 @@ end
 @testset "plotting single qubit state steps" begin
     state_steps = []
     ising = Dict((1,) => 1, (2,) => 1, (1,2) => -1)
-    ρ = simulate(ising, 100, AS_CIRCULAR, 100, state_steps=state_steps)
+    ρ = simulate(ising, 10, AS_CIRCULAR, silence=true, state_steps=state_steps)
 
     @testset "single qubit, no kwargs" begin
         plt = plot_state_steps(state_steps)
@@ -558,7 +558,7 @@ end
 
 @testset "plotting hamiltonian energy spectrum" begin
     ising_model = Dict((1,) => 1, (2,) => -.25, (1,2) => -.9)
-    H(s) = transverse_ising_hamiltonian(ising_model, AS_CIRCULAR, s)
+    H(s) = hamiltonian_transverse_ising(ising_model, AS_CIRCULAR, s)
     @testset "No parameters" begin
         plt = plot_hamiltonian_energy_spectrum(H)
         @test true

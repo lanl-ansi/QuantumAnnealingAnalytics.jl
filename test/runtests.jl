@@ -4,7 +4,7 @@ using QuantumAnnealing
 using JSON
 using Test
 
-@testset "QuantumAnnealing" begin
+@testset "QuantumAnnealingAnalytics" begin
 
     include("base.jl")
 
