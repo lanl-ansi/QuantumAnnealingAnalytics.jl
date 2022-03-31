@@ -2,7 +2,7 @@ QuantumAnnealingAnalytics.jl Change Log
 =======================================
 
 ### Staged
-- nothing
+- Add ground energy shift option to hamiltonian energy plots
 
 ### v0.2.0
 - Updates for QuantumAnnealing v0.2
