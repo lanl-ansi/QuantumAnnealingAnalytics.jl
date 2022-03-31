@@ -223,7 +223,7 @@ function plot_varied_time_simulations(ising_model::Dict, annealing_schedule::_QA
     return plt
 end
 
-function plot_hamiltonian_energy_spectrum(hamiltonian::Function; s_range = (0,1), num_points = 50, kwargs...)
+function plot_hamiltonian_energy_spectrum(hamiltonian::Function; s_range = (0,1), num_points = 50, shift=false, kwargs...)
     ss = range(s_range[1],s_range[2],length=num_points)
     n = size(hamiltonian(ss[1]))[1]
 
@@ -232,6 +232,13 @@ function plot_hamiltonian_energy_spectrum(hamiltonian::Function; s_range = (0,1)
         hs = hamiltonian(s)
         evals, evecs = LinearAlgebra.eigen(Matrix(hs))
         energies[i,:] = evals
+    end
+
+    if shift
+        ground_energies = energies[:,1]
+        for i in 1:size(energies)[2]
+            energies[:,i] = energies[:,i] - ground_energies
+        end
     end
 
     title = "Time Varying Spectrum of H"

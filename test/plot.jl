@@ -571,4 +571,8 @@ end
         plt = plot_hamiltonian_energy_spectrum(H, s_range=(0.5,0.7))
         @test true
     end
+    @testset "shifting by ground state" begin
+        plt = plot_hamiltonian_energy_spectrum(H, shift=true)
+        @test true
+    end
 end
