@@ -250,3 +250,41 @@ function plot_hamiltonian_energy_spectrum(hamiltonian::Function; s_range = (0,1)
     return plt
 end
 
+function plot_ising_model(ising_model; color_nodes=true, curves=false, nodeshape=:circle, kwargs...)
+    n = _QA._check_ising_model_ids(ising_model)
+    edges = fill(0, (n,n))
+    nodes = fill(0.0, n)
+    edge_labels = Dict()
+    for (k,v) in ising_model
+        if length(k) == 1
+            nodes[k[1]] = v
+        elseif length(k) == 2
+            edge_labels[k] = v
+            edges[k[1],k[2]] = 1
+            edges[k[2],k[1]] = 1
+        else
+            @warn("cannot display qubit couplings of more than two qubits, omitting coupling")
+        end
+    end
+    nodecolor = 1
+    if color_nodes
+        color_options = Plots.palette([:blue, :white, :red], 21)
+        color_choices = collect(color_options)
+        for (i,node) in enumerate(nodes)
+            color_val = round(node,digits=1)
+            if color_val < -1
+                color_val = -1
+            elseif color_val > 1
+                color_val = 1
+            end
+            color_index = round(Int64, ((color_val+1) * 10)+1)
+            color_choices[i] = color_options[color_index]
+        end
+        nodecolor = color_choices
+    end
+    if length(edge_labels) == 0
+        error("GraphRecipes.jl cannot currently take graphs without edges, so the ising model must have at least one nonzero coupling")
+    end
+    plt = GraphRecipes.graphplot(edges; nodecolor=nodecolor, names=nodes, curves=curves, edge_label=edge_labels, nodeshape=nodeshape, kwargs...)
+    return plt
+end

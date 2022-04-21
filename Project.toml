@@ -5,6 +5,7 @@ repo = "https://github.com/lanl-ansi/QuantumAnnealingAnalytics.jl"
 version = "0.2.0"
 
 [deps]
+GraphRecipes = "bd48cda9-67a9-57be-86fa-5b3c104eda73"
 JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
@@ -12,9 +13,9 @@ QuantumAnnealing = "4832667a-bab9-40a8-88f6-be9efce3ea89"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [compat]
-QuantumAnnealing = "~0.2"
-Plots = "~1, ~0.29"
 JSON = "~0.21, ~0.20, ~0.19, ~0.18"
+Plots = "~1, ~0.29"
+QuantumAnnealing = "~0.2"
 julia = "1.6"
 
 [extras]
@@ -22,4 +23,3 @@ Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
 test = ["Test"]
-
