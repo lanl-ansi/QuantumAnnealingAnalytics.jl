@@ -576,3 +576,30 @@ end
         @test true
     end
 end
+
+@testset "plotting ising model graphs" begin
+    ising_model = Dict((1,2) => 1)
+    @testset "no fields, one coupling" begin
+        plt = plot_ising_model(ising_model, color_nodes=false)
+        @test true
+        plt = plot_ising_model(ising_model)
+        @test true
+    end
+
+    ising_model = Dict((1,) => 1.1, (2,) => -0.4, (1,2) => -1.1)
+    @testset "with fields, one coupling" begin
+        plt = plot_ising_model(ising_model, color_nodes=false)
+        @test true
+        plt = plot_ising_model(ising_model)
+        @test true
+    end
+
+    ising_model = Dict((1,2) => 1, (1,2,3) => 1)
+    @testset "no fields, one two qubit coupling, one three qubit coupling" begin
+        plt = plot_ising_model(ising_model, color_nodes=false)
+        @test true
+        plt = plot_ising_model(ising_model)
+        @test true
+    end
+
+end

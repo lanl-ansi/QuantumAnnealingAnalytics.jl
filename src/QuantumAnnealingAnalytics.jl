@@ -2,6 +2,7 @@ module QuantumAnnealingAnalytics
     import LinearAlgebra
     import Plots
     import Plots.Measures
+    import GraphRecipes
     import QuantumAnnealing
     import JSON
     const _QA = QuantumAnnealing
