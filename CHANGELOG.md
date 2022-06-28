@@ -3,6 +3,7 @@ QuantumAnnealingAnalytics.jl Change Log
 
 ### Staged
 - Add ground energy shift option to hamiltonian energy plots
+- Add Ising model graph plotting
 
 ### v0.2.0
 - Updates for QuantumAnnealing v0.2
