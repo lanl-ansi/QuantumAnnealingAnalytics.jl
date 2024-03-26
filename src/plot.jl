@@ -12,7 +12,7 @@ end
 function to plot the states present in a density matrix output by QuantumAnnealing.simulate
 kwargs are for Plots.bar
 """
-function plot_states(ρ; order=:numeric, spin_comp=ones(Int(log2(size(ρ)[1]))), num_states=16, ising_model=nothing, energy_levels=0, kwargs...)
+function plot_states(ρ; order=:numeric, spin_comp=ones(Int(log2(size(ρ)[1]))), num_states=0, ising_model=nothing, energy_levels=0, kwargs...)
     state_probs = _QA.z_measure_probabilities(ρ)
     n = Int(log2(length(state_probs)))
     state_spin_vecs = map((x) -> _QA.int_to_spin(x,pad=n), 0:2^n-1)
@@ -42,12 +42,16 @@ function plot_states(ρ; order=:numeric, spin_comp=ones(Int(log2(size(ρ)[1]))),
     probs = [states[i].prob for i = 1:length(states)]
     strings = map(x -> join(string.(x.spin_vec),"\n"), states)
 
-    num_states = min(num_states, length(states))
+    num_state_bars = length(states)
+    if num_states > 0 
+        num_state_bars = min(num_states, num_state_bars)
+    end
     mm = Measures.mm
-    plt = Plots.bar(probs[1:num_states]; xticks = (1:num_states,strings[1:num_states]),
-                    size = (900,600),bottom_margin=10mm, xlabel="spin state",
-                    ylabel = "probability",title="State Probabilities of ρ",label="prob",
-                    legend = :none, kwargs...)
+    plt = Plots.bar(probs[1:num_state_bars]; xticks = (1:num_state_bars,strings[1:num_state_bars]),
+        size = (900,600),bottom_margin=10mm, xlabel="spin state",
+        ylabel = "probability",title="State Probabilities of ρ",label="prob",
+        legend = :none, kwargs...
+    )
     return plt
 end
 

@@ -80,6 +80,16 @@ end
         @test true
     end
 
+    @testset "two qubit plot, num_states" begin
+        plt = plot_states(ρ,num_states=2)
+        @test true
+    end
+
+    @testset "two qubit plot, num_states" begin
+        plt = plot_states(ρ,ising_model=ising,energy_levels=1)
+        @test true
+    end
+
     @testset "two qubit plot, numeric sorting, with kwargs" begin
         plt = plot_states(ρ,order=:numeric,xlabel="x")
         @test true
