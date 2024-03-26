@@ -2,7 +2,7 @@ name = "QuantumAnnealingAnalytics"
 uuid = "f4de928d-7c93-4858-9dcf-40bc6948a1da"
 authors = ["Zach Morrell, Carleton Coffrin"]
 repo = "https://github.com/lanl-ansi/QuantumAnnealingAnalytics.jl"
-version = "0.2.0"
+version = "0.2.1"
 
 [deps]
 GraphRecipes = "bd48cda9-67a9-57be-86fa-5b3c104eda73"

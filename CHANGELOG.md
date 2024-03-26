@@ -2,6 +2,9 @@ QuantumAnnealingAnalytics.jl Change Log
 =======================================
 
 ### Staged
+- nothing
+
+### v0.2.1
 - Change `plot_states` to show all states by default (fix)
 - Add ground energy shift option to hamiltonian energy plots
 - Add Ising model graph plotting
